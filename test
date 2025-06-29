@@ -1,0 +1,30 @@
+Workaround Options
+🔹 Option 1: Split the .tar file into parts
+You can split the .tar file and push the parts to Git, then reassemble it after cloning.
+
+Split the file:
+
+bash
+Copy
+Edit
+split -b 24m mule-rtfctl-curl-nc-git.tar mule-image-part-
+This creates files like:
+
+arduino
+Copy
+Edit
+mule-image-part-aa
+mule-image-part-ab
+mule-image-part-ac
+...
+Push all parts to Bitbucket
+
+Then, after cloning the repo:
+
+Reassemble the parts:
+
+bash
+Copy
+Edit
+cat mule-image-part-* > mule-rtfctl-curl-nc-git.tar
+docker load -i mule-rtfctl-curl-nc-git.tar
