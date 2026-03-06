@@ -1,0 +1,39 @@
+
+
+Management of Compliance posture for the Tower
+Continued support for OR, IA, and RBI audits through timely collaboration and documentation readiness. All audit requirements so far have been met without delays.
+Maintained strict verification of the correct use of pre-approved CRQs before deployment, ensuring compliance in all change requests.
+Enforced that all changes go through approved Change Requests (CRs) during the CR window, effectively preventing unauthorized implementations. No changes (including client onboarding, pipeline changes, etc.) or deployments are made in production without an approved CR. All changes are implemented strictly through the CR process.
+Any issues reported in production are not simply acknowledged; detailed incident reports are created, and thorough RCA is shared with all relevant stakeholders.
+Corrective actions are promptly taken based on the RCA to prevent recurrence and improve system stability.
+Moving forward, we aim to enhance communication across teams to further streamline CRQ verification and audit preparation processes.
+Continuous monitoring and periodic training will be essential to sustain compliance and improve efficiency in the second half of the year.
+
+
+Managing Business & Technology Operations
+
+Proactively communicated to the business regarding any planned or unplanned downtime or activities.
+Strictly adhered to email management protocols and responded promptly to issues raised via email.
+Fixing and Provided accurate and detailed (RCA) for all issues reported in Mule and JMI all environments, pipleine issues or application issues.
+Ensured availability of support resources 24x7 to maintain uninterrupted operations.
+Conducted thorough production knowledge transfer handovers, including verification of logs in JMI, PII data handling, traceability, and ensured APIs were discoverable via Ingress and Kibana. And created common GoCD teamplates and shared with Mule DevOps Team to develope operation piplines and supported them till release.
+Maintained zero manual data patches, ensuring data integrity and compliance.
+Ensured the team understands the architecture of key platforms such as Mule, JMI , and Kong, continue to share KT with support team and filling knowledge gaps.
+Aligned at least one expert and one backup resource in each critical area to ensure knowledge continuity, JMI and Mule and GoCD related, I ensure sharing KT and critical points shared with team.
+Performed all production DevOps-related work with zero escalations, maintaining high operational stability.
+Continuously looking for opportunities to automate tasks and eliminate manual repetitive work.
+
+Systems Management
+
+Ensured adherence to production incident SLAs in ServiceNow (SNOW).
+Actively supported incident resolution and tracking, with timely updates and escalations.
+Tracked, exited, and managed the handover of Dynatrace licenses to avoid wastage and maintain compliance.
+Delivered KT sessions to leads and operations teams on SBOM, Liquibase, and GoCD pipelines.
+Actively supporting JMI-related tasks on the platform while managing Mule operations and stability.
+Continuously looked for opportunities to automate manual, repetitive tasks
+Created reusable GoCD templates to streamline pipeline creation—delivered 14+ pipelines for Mule operations. and shared GoCD KT with Mule devops team and helped them in building other pipleines and fixing scripts.
+Integrated SBOM (Software Bill of Materials) in the JMI build pipeline: Added SBOM generation scripts to 120+ applications for rebuild and report generation. Semi-automated the initial application registration in the dependency tracker and SBOM central tool (in progress, delivered initial setup within a week).
+Completed Liquibase certification, and: Integrated Liquibase update operations into one JMI application (now reusable via makefiles for builds and deployments). Developed standalone Liquibase pipelines in GoCD, supporting DB updates, rollback, and automated clearing of old sessions and locks (for Acquirer and Clearing DBs).
+Developed and delivered to Mule Leads - Node.js scripts to generate Mule resource data faster than existing Mule utilities—shared knowledge with leads and operations.
+shared KT regarding Liquibase and other GoCD pipelines to operations.
+Currently preparing for AWS Solution Architect Certification, Java and focusing on monitoring automation.
