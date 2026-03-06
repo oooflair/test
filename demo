@@ -37,3 +37,116 @@ Completed Liquibase certification, and: Integrated Liquibase update operations i
 Developed and delivered to Mule Leads - Node.js scripts to generate Mule resource data faster than existing Mule utilities—shared knowledge with leads and operations.
 shared KT regarding Liquibase and other GoCD pipelines to operations.
 Currently preparing for AWS Solution Architect Certification, Java and focusing on monitoring automation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. Management of Compliance Posture for the Tower
+
+Continued support for OR, IA, and RBI audits through timely collaboration and documentation readiness. All audit requirements have been met without delays.
+
+Maintained strict verification of pre-approved CRQs before deployment, ensuring compliance in all change requests.
+
+Ensured that all production changes are implemented strictly through approved Change Requests (CRs) during the CR window, preventing any unauthorized deployments including client onboarding, pipeline changes, or configuration updates.
+
+For any issues reported in production, ensured detailed incident reports and Root Cause Analysis (RCA) are created and shared with relevant stakeholders instead of simply acknowledging incidents.
+
+Implemented corrective actions based on RCA findings to prevent recurrence and improve overall system stability.
+
+Maintained strict operational discipline with zero manual data patches, ensuring data integrity and compliance.
+
+Ensured proper documentation and traceability for all operational changes and deployments.
+
+Moving forward, aiming to further strengthen cross-team communication for CRQ verification and audit preparation, along with periodic training to sustain compliance posture.
+
+2. Managing Business & Technology Operations
+
+Proactively communicated with business teams regarding planned or unplanned downtime, maintenance activities, and operational updates.
+
+Strictly adhered to email management protocols and ensured timely responses to operational issues raised by stakeholders.
+
+Provided troubleshooting support and detailed RCA for issues related to Mule, JMI, pipelines, and application deployments across all environments.
+
+Ensured 24x7 operational support availability to maintain uninterrupted platform and application operations.
+
+Conducted production knowledge transfer sessions, including validation of logs in JMI, PII data handling practices, traceability mechanisms, and API discovery through Ingress and Kibana.
+
+Developed and shared common GoCD pipeline templates with Mule DevOps teams to support development pipelines and assisted teams until successful production releases.
+
+Ensured team members understand the architecture of key platforms including Mule, JMI, and Kong, and continuously shared KT sessions to close knowledge gaps.
+
+Ensured knowledge continuity by aligning primary and backup resources for critical components across Mule, JMI, and GoCD operations.
+
+Delivered all production DevOps activities with zero escalations, maintaining high operational stability.
+
+Actively supported Mule and JMI deployments across all environments, assisting development teams with troubleshooting and debugging issues.
+
+Resolved critical production issues including JMI cron job failures by creating instant pipelines when teams lacked access, ensuring minimal operational disruption.
+
+Provided operational support for FinOne DB activities, production health checks, and platform stability, ensuring continuous service availability.
+
+Worked on JMI PCIDSS DC and DR setup within existing Mule clusters, strengthening platform resilience.
+
+3. Systems Management
+
+Ensured adherence to production incident SLAs through ServiceNow (SNOW) and actively supported incident resolution and updates.
+
+Tracked and managed Dynatrace license utilization and handovers, preventing license wastage and ensuring compliance.
+
+Delivered KT sessions to leads and operations teams on SBOM, Liquibase, and GoCD pipelines.
+
+Developed 36+ reusable GoCD pipeline templates for Mule and JMI operations, improving efficiency and standardization of deployment processes.
+
+Integrated SBOM generation into build pipelines for 120+ applications, enabling automated dependency reporting and centralized artifact tracking.
+
+Semi-automated application registration for dependency tracking and SBOM central tool integration, delivering the initial implementation within a week.
+
+Completed Liquibase certification and implemented Liquibase-based pipelines supporting database updates, rollback capabilities, and automated clearing of sessions and locks.
+
+Developed a Liquibase deployment pipeline capable of handling database operations without direct server login, eliminating 91 manual server login requests and improving security and operational efficiency.
+
+Developed Node.js scripts to generate Mule resource data faster than existing utilities and shared these scripts with Mule leads and operations teams.
+
+Created Node.js scripts for controlled rolling restarts of applications with logging, supporting maintenance activities requested by tower leadership and enabling UAT teams to manage restarts effectively.
+
+Automated the end-to-end SBOM pipeline in GoCD, from application registration in build stage to artifact generation and publishing JSON outputs to SBOM central tools and AWS S3.
+
+Developed a POC LLM-based solution converting natural language queries to SQL, with optimization to reduce LLM calls and improve query validation before database execution.
+
+Developed a Python-based OpenAPI specification generator to accelerate client-specific API specification generation and developer portal updates.
+
+Completed training programs in Terraform, AWS, CKAD, and AI technologies including OpenAI, HuggingFace, LangChain, Vector Databases, RAG, and building LLM agents.
+
+Currently preparing for AWS Solution Architect certification, Java development, and further monitoring and automation enhancements.
+
+
+
+
+
+
+
+Overall, my focus throughout the year has been on strengthening platform stability, maintaining a strong compliance posture, and improving operational efficiency through automation and standardization across Mule and JMI platforms. By implementing reusable pipelines, SBOM integration, Liquibase automation, and operational tooling, I have helped reduce manual effort, improve audit readiness, and enhance the reliability of production systems.
+
+I will continue focusing on automation, cloud capabilities, and platform engineering improvements to further enhance system scalability, monitoring, and operational efficiency.
+
+I would also like to thank my manager and leadership for their trust and support in giving me the opportunity to work on these initiatives and contribute to platform improvements for the organization.
