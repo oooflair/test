@@ -1,0 +1,593 @@
+Requirement:
+Hi Saran,
+
+Following are the requirements for digital lending database operations. Please let us know if these are already implemented in liquibase pipeline or not. If not implemented request you to help on the same.
+In the Digital Lending platform, we require the following capabilities to be supported through Liquibase-based database deployments to ensure controlled changes, rollback capability, and proper versioning.
+
+1. Bulk Data Insert
+
+Liquibase should support inserting bulk records into database tables as part of deployment scripts. This will help in onboarding configurations or master data required for multiple partners or journeys.
+
+2. Backup Before Data Update
+
+Before executing any update operations on existing records, the system should:
+
+Take a backup of the existing data.
+Perform the update operation.
+Allow the restoration of the original data in case rollback is required.
+3. Insert or Update JSON Configuration
+
+For columns storing JSON configuration structures:
+
+Liquibase should support inserting new JSON records.
+If the record already exists:
+Take a backup of the existing JSON structure.
+Perform the update with the new JSON structure.
+A mechanism should exist to restore the previous JSON configuration if required.
+4. Stored Procedure Creation with Role Assignment
+
+Liquibase should support:
+
+Creation of new stored procedures.
+Granting execution permissions to specific database roles as part of the same deployment.
+5. Stored Procedure Update / Replacement with Backup
+
+When modifying an existing stored procedure:
+
+Take a backup of the current stored procedure definition.
+Replace or update the stored procedure with the new version.
+Maintain a rollback mechanism to restore the previous stored procedure if required.
+6. Backup of Stored Procedures
+
+Liquibase deployment should support:
+
+Backing up individual stored procedures before modification.
+Optionally creating a backup of all stored procedures prior to deployment for safety and audit purposes.
+
+
+MULE_LIQUIBASE_DB_MULTI_ENVS.gocd
+
+format_version: 10
+
+pipelines:
+  MULE_LIQUIBASE_DB_MULTI_ENVS:
+    group: mule-rtf-automation-pipeline-ops-prod
+    label_template: '${COUNT}'
+    lock_behavior: none
+    display_order: -1
+    secure_variables:
+      UAT_10_5_20_213_DATABASE_USERNAME: 'AES:7TjTGY2/pnJt+NZxmyoYbQ==:m106EaKQZe8876FpzsJBrw=='
+      UAT_10_5_20_213_DATABASE_PASSWORD: 'AES:kzmPLoRb/6BKDuB+TF2gCA==:t1amP2eqqhxYCedYKa9pbA=='
+      UAT_10_5_129_98_DATABASE_USERNAME: 'AES:n87fVmnXPUQv4KvggxPbbg==:D2XzHzGpVBu9etmUkZCGaw=='
+      UAT_10_5_129_98_DATABASE_PASSWORD: 'AES:uSIB/jk1fUTnrxbagGpEOA==:AaweIbtLO44qqCHsadfe6A=='
+  
+      PROD_10_1_14_199_DATABASE_USERNAME: 'AES:L2jB9NoqNPvB1g8IgOlg7g==:o7P8cWLIf7z4t5aaBv6gqA=='
+      PROD_10_1_14_199_DATABASE_PASSWORD: 'AES:8b+NnWU+mu047276rjV2sA==:3Po/osG8zB0mxiJJK0fJIg=='
+      PROD_10_1_14_242_DATABASE_USERNAME: 'AES:3VmgHqho4X+NiVOH5Ej8ag==:r+BLCBFsdSfie8yv/q4ekA=='
+      PROD_10_1_14_242_DATABASE_PASSWORD: 'AES:PFIU+YzQO5wnkdBs0tiedg==:VjAQWReGjww/kDw9UwD2EA=='
+      PROD_10_1_14_80_DATABASE_USERNAME: 'AES:QjsmM5mScy9Y1QUFe/Wpig==:tsr+V9nzVQS3Dc/65a1KXg=='
+      PROD_10_1_14_80_DATABASE_PASSWORD: 'AES:vCa2RXZ0Xh0Wa7WsqWkdpw==:LPe0DjZ/rs4p9v0AGFVfHw=='
+
+      ARTIFACTORY_USERNAME: 'AES:Dq2snXw4wVzHqdHP/FwdDQ==:i/2NcVJa7gHE+7dJ/ytzJg=='
+      ARTIFACTORY_PASSWORD: 'AES:EXqAzrPccY+W1RzfyvSB+g==:BZYNOjrdPMbNEGT8kX/JaaB0WQDtXZq28ro/E8mZThw='
+      ARTIFACTORY_HA_PASSWORD: 'AES:t++Rsjp06DRH4XRGg5gWWA==:zc5oVWFk3le8sIKC/U/JTeHwKexklGAyUqtjL7up+/k='
+      ARTIFACTORY_API_PASSWORD: 'AES:F9apXFfFEinFX3wagavQ4w==:jMqJ+5WLiE387Ci3NRDap51Pb1jyR4I8QtbvwRn+KO4='
+      
+
+    environment_variables:
+      ENVIRONMENT: UAT
+      DATABASE_URL: jdbc:oracle:thin:@//myhost:1521/ORCLPDB1
+      OPERATION: update/rollback
+      CHANGEREQUEST_ID: CH123982828
+      ROLLBACK_TAG: Pass rollback Tag if operation is rollback else leave blank
+
+    materials:
+      git-be5ed8a:
+        git: https://bitbucket.devops.idfcbank.com/scm/api/liquibase-db-operations-pipeline.git
+        username: apidevsecops-local-user
+        shallow_clone: false
+        auto_update: true
+        branch: master
+        encrypted_password: 'AES:E67HUwEE4iCmE3xkYt6J/g==:qbgLtda3B/sPTmxXjY8vCA=='
+
+    parameters:
+      ENVIRONMENT: UAT
+      DATABASE_URL: jdbc:oracle:thin:@//myhost:1521/ORCLPDB1
+      OPERATION: update/rollback
+      CHANGEREQUEST_ID: CH123982828
+      ROLLBACK_TAG: Pass rollback Tag if operation is rollback else leave blank
+
+
+    stages:
+      - MULE_LIQUIBASE_DB_MULTI_ENVS:
+          fetch_materials: true
+          keep_artifacts: false
+          clean_workspace: true
+          approval:
+            type: manual
+            allow_only_on_success: false
+          secure_variables:      
+            UAT_10_5_20_213_DATABASE_USERNAME: 'AES:7TjTGY2/pnJt+NZxmyoYbQ==:m106EaKQZe8876FpzsJBrw=='
+            UAT_10_5_20_213_DATABASE_PASSWORD: 'AES:kzmPLoRb/6BKDuB+TF2gCA==:t1amP2eqqhxYCedYKa9pbA=='
+            UAT_10_5_129_98_DATABASE_USERNAME: 'AES:n87fVmnXPUQv4KvggxPbbg==:D2XzHzGpVBu9etmUkZCGaw=='
+            UAT_10_5_129_98_DATABASE_PASSWORD: 'AES:uSIB/jk1fUTnrxbagGpEOA==:AaweIbtLO44qqCHsadfe6A=='
+            
+
+            PROD_10_1_14_199_DATABASE_USERNAME: 'AES:L2jB9NoqNPvB1g8IgOlg7g==:o7P8cWLIf7z4t5aaBv6gqA=='
+            PROD_10_1_14_199_DATABASE_PASSWORD: 'AES:8b+NnWU+mu047276rjV2sA==:3Po/osG8zB0mxiJJK0fJIg=='
+            PROD_10_1_14_242_DATABASE_USERNAME: 'AES:3VmgHqho4X+NiVOH5Ej8ag==:r+BLCBFsdSfie8yv/q4ekA=='
+            PROD_10_1_14_242_DATABASE_PASSWORD: 'AES:PFIU+YzQO5wnkdBs0tiedg==:VjAQWReGjww/kDw9UwD2EA=='
+            PROD_10_1_14_80_DATABASE_USERNAME: 'AES:QjsmM5mScy9Y1QUFe/Wpig==:tsr+V9nzVQS3Dc/65a1KXg=='
+            PROD_10_1_14_80_DATABASE_PASSWORD: 'AES:vCa2RXZ0Xh0Wa7WsqWkdpw==:LPe0DjZ/rs4p9v0AGFVfHw=='
+
+            ARTIFACTORY_USERNAME: 'AES:Dq2snXw4wVzHqdHP/FwdDQ==:i/2NcVJa7gHE+7dJ/ytzJg=='
+            ARTIFACTORY_PASSWORD: 'AES:EXqAzrPccY+W1RzfyvSB+g==:BZYNOjrdPMbNEGT8kX/JaaB0WQDtXZq28ro/E8mZThw='
+            ARTIFACTORY_HA_PASSWORD: 'AES:t++Rsjp06DRH4XRGg5gWWA==:zc5oVWFk3le8sIKC/U/JTeHwKexklGAyUqtjL7up+/k='
+            ARTIFACTORY_API_PASSWORD: 'AES:F9apXFfFEinFX3wagavQ4w==:jMqJ+5WLiE387Ci3NRDap51Pb1jyR4I8QtbvwRn+KO4='
+
+          jobs:
+            MULE_LIQUIBASE_DB_MULTI_ENVS:
+              timeout: 0
+              secure_variables:      
+                UAT_10_5_20_213_DATABASE_USERNAME: 'AES:7TjTGY2/pnJt+NZxmyoYbQ==:m106EaKQZe8876FpzsJBrw=='
+                UAT_10_5_20_213_DATABASE_PASSWORD: 'AES:kzmPLoRb/6BKDuB+TF2gCA==:t1amP2eqqhxYCedYKa9pbA=='
+                UAT_10_5_129_98_DATABASE_USERNAME: 'AES:n87fVmnXPUQv4KvggxPbbg==:D2XzHzGpVBu9etmUkZCGaw=='
+                UAT_10_5_129_98_DATABASE_PASSWORD: 'AES:uSIB/jk1fUTnrxbagGpEOA==:AaweIbtLO44qqCHsadfe6A=='
+
+                PROD_10_1_14_199_DATABASE_USERNAME: 'AES:L2jB9NoqNPvB1g8IgOlg7g==:o7P8cWLIf7z4t5aaBv6gqA=='
+                PROD_10_1_14_199_DATABASE_PASSWORD: 'AES:8b+NnWU+mu047276rjV2sA==:3Po/osG8zB0mxiJJK0fJIg=='
+                PROD_10_1_14_242_DATABASE_USERNAME: 'AES:3VmgHqho4X+NiVOH5Ej8ag==:r+BLCBFsdSfie8yv/q4ekA=='
+                PROD_10_1_14_242_DATABASE_PASSWORD: 'AES:PFIU+YzQO5wnkdBs0tiedg==:VjAQWReGjww/kDw9UwD2EA=='
+                PROD_10_1_14_80_DATABASE_USERNAME: 'AES:QjsmM5mScy9Y1QUFe/Wpig==:tsr+V9nzVQS3Dc/65a1KXg=='
+                PROD_10_1_14_80_DATABASE_PASSWORD: 'AES:vCa2RXZ0Xh0Wa7WsqWkdpw==:LPe0DjZ/rs4p9v0AGFVfHw=='
+
+                ARTIFACTORY_USERNAME: 'AES:Dq2snXw4wVzHqdHP/FwdDQ==:i/2NcVJa7gHE+7dJ/ytzJg=='
+                ARTIFACTORY_PASSWORD: 'AES:EXqAzrPccY+W1RzfyvSB+g==:BZYNOjrdPMbNEGT8kX/JaaB0WQDtXZq28ro/E8mZThw='
+                ARTIFACTORY_HA_PASSWORD: 'AES:t++Rsjp06DRH4XRGg5gWWA==:zc5oVWFk3le8sIKC/U/JTeHwKexklGAyUqtjL7up+/k='
+                ARTIFACTORY_API_PASSWORD: 'AES:F9apXFfFEinFX3wagavQ4w==:jMqJ+5WLiE387Ci3NRDap51Pb1jyR4I8QtbvwRn+KO4='
+              
+              elastic_profile_id: mulesoftrtfuat_dind
+
+              environment_variables:
+                ENVIRONMENT: UAT
+                DATABASE_URL: jdbc:oracle:thin:@//myhost:1521/ORCLPDB1
+                OPERATION: update/rollback
+                CHANGEREQUEST_ID: CH123982828
+                ROLLBACK_TAG: Pass rollback Tag if operation is rollback else leave blank
+
+              tasks:
+                - exec:
+                    run_if: passed
+                    working_directory: liquibase_operations_oracle_database/liquibase_scripts
+                    command: sh
+                    arguments:
+                      - ./run-liquibase.sh
+
+
+liquibase-rollback.sh
+#!/bin/sh
+set -euo pipefail
+
+echo
+echo
+echo "============================================================================================================================="
+echo "============================================     Starting liquibase-rollback.sh      ============================================="
+echo "============================================================================================================================="
+echo
+
+ENV_ARG=${1:-}
+if [ -n "$ENV_ARG" ]; then
+  ENVIRONMENT="$ENV_ARG"
+else
+  ENVIRONMENT=${ENVIRONMENT:-}
+fi
+
+if [ -z "$ENVIRONMENT" ]; then
+  echo "❌ ERROR: ENVIRONMENT required"
+  exit 1
+fi
+
+if [ -z "$ROLLBACK_TAG" ]; then
+  echo "❌ ERROR: ROLLBACK_TAG required"
+  exit 1
+fi
+
+
+ENV_LOWER=$(printf '%s' "$ENVIRONMENT" | awk '{print tolower($0)}')
+
+: "${DB_URL:?Missing DB_URL}"
+: "${DB_USER:?Missing DB_USER}"
+: "${DB_PASS:?Missing DB_PASS}"
+: "${DB_IP_UNDERSCORE:?Missing DB_IP_UNDERSCORE}"
+
+CHANGELOG_DIR="/liquibase/databases/${ENV_LOWER}/${ENV_LOWER}_${DB_IP_UNDERSCORE}"
+CHANGELOG_FILE="changelog.xml"
+
+if [ ! -f "$CHANGELOG_DIR/$CHANGELOG_FILE" ]; then
+  echo "❌ ERROR: Changelog missing: $CHANGELOG_DIR/$CHANGELOG_FILE"
+  exit 1
+fi
+
+echo "✅ [INFO] Changelog directory: $CHANGELOG_DIR"
+echo "✅ [INFO] Changelog file: $CHANGELOG_FILE"
+
+
+
+# Locate liquibase binary
+echo "✅ [DEBUG] Searching for liquibase binary in container..."
+LIQUIBASE_BIN=$(command -v liquibase || find / -type f -name liquibase 2>/dev/null | head -n 1 || true)
+
+if [ -z "$LIQUIBASE_BIN" ]; then
+  echo "❌ [ERROR] Liquibase binary not found in container!"
+  exit 1
+fi
+
+echo "✅ [INFO] Found liquibase binary at: $LIQUIBASE_BIN"
+
+# Patch Liquibase wrapper script (to use sh)
+echo "✅ [INFO] Patching Liquibase binary to use sh instead of bash..."
+sed -i 's|#!/bin/bash|#!/bin/sh|' "$LIQUIBASE_BIN"
+sed -i 's|env bash|env sh|g' "$LIQUIBASE_BIN"
+sed -i 's| bash | sh |g' "$LIQUIBASE_BIN"
+
+# Check version (optional)
+echo "✅ [INFO] Liquibase version:"
+"$LIQUIBASE_BIN" --version || echo "[WARN] Could not get liquibase version"
+
+# Check required DB environment variables early
+: "${DB_URL:?Missing DB_URL environment variable}"
+: "${DB_USER:?Missing DB_USER environment variable}"
+: "${DB_PASS:?Missing DB_PASS environment variable}"
+echo
+echo
+echo
+echo "User Paased Environment Variables through GoCD Pipeline: execution in liquibase-rollback.sh"
+echo "✅ [INFO] DB Username: $DB_USER"
+echo "✅ [INFO] DB URL: $DB_URL"
+echo "✅ [INFO] CHANGEREQUEST_ID: $CHANGEREQUEST_ID"
+echo "✅ [INFO] ROLLBACK_TAG: $ROLLBACK_TAG"
+
+# Change directory to changelog directory so relative path works
+cd "$CHANGELOG_DIR" || {
+  echo "❌ [ERROR] Failed to change directory to $CHANGELOG_DIR"
+  exit 1
+}
+echo
+echo "📜 ------------------------------------------------------------->> History before rollback"
+echo
+"$LIQUIBASE_BIN" \
+  --driver=oracle.jdbc.OracleDriver \
+  --url="$DB_URL" \
+  --username="$DB_USER" \
+  --password="$DB_PASS" \
+  --changeLogFile="changelog.xml" \
+  history
+
+echo "↩️ ------------------------------------------------------------->> Rolling back to tag: $ROLLBACK_TAG"
+echo
+"$LIQUIBASE_BIN" \
+  --driver=oracle.jdbc.OracleDriver \
+  --url="$DB_URL" \
+  --username="$DB_USER" \
+  --password="$DB_PASS" \
+  --changeLogFile="changelog.xml" \
+  rollback "$ROLLBACK_TAG"
+
+echo "📜 ------------------------------------------------------------->> History after rollback"
+echo
+"$LIQUIBASE_BIN" \
+  --driver=oracle.jdbc.OracleDriver \
+  --url="$DB_URL" \
+  --username="$DB_USER" \
+  --password="$DB_PASS" \
+  --changeLogFile="changelog.xml" \
+  history
+
+
+echo
+echo "✅ liquibase-rollback.sh completed"
+
+
+
+liquibase-wrapper.sh
+#!/bin/sh
+set -euo pipefail
+echo
+echo
+echo "============================================================================================================================="
+echo "============================================     Starting liquibase-wrapper.sh      ============================================="
+echo "============================================================================================================================="
+echo
+
+ENV_ARG=${1:-}
+if [ -n "$ENV_ARG" ]; then
+  ENVIRONMENT="$ENV_ARG"
+else
+  ENVIRONMENT=${ENVIRONMENT:-}
+fi
+
+if [ -z "$ENVIRONMENT" ]; then
+  echo "❌ ERROR: ENVIRONMENT not provided"
+  exit 1
+fi
+
+ENV_LOWER=$(printf '%s' "$ENVIRONMENT" | awk '{print tolower($0)}')
+
+: "${DB_URL:?Missing DB_URL}"
+: "${DB_USER:?Missing DB_USER}"
+: "${DB_PASS:?Missing DB_PASS}"
+: "${DB_IP_UNDERSCORE:?Missing DB_IP_UNDERSCORE}"
+
+CHANGELOG_DIR="/liquibase/databases/${ENV_LOWER}/${ENV_LOWER}_${DB_IP_UNDERSCORE}"
+CHANGELOG_FILE="changelog.xml"
+
+if [ ! -f "$CHANGELOG_DIR/$CHANGELOG_FILE" ]; then
+  echo "❌ ERROR: Missing changelog: $CHANGELOG_DIR/$CHANGELOG_FILE"
+  exit 1
+fi
+
+echo "✅ [INFO] Changelog directory: $CHANGELOG_DIR"
+echo "✅ [INFO] Changelog file: $CHANGELOG_FILE"
+
+
+
+# Locate liquibase binary
+echo "✅ [DEBUG] Searching for liquibase binary in container..."
+LIQUIBASE_BIN=$(command -v liquibase || find / -type f -name liquibase 2>/dev/null | head -n 1 || true)
+
+if [ -z "$LIQUIBASE_BIN" ]; then
+  echo "❌ [ERROR] Liquibase binary not found in container!"
+  exit 1
+fi
+
+echo "✅ [INFO] Found liquibase binary at: $LIQUIBASE_BIN"
+
+# Patch Liquibase wrapper script (to use sh)
+echo "✅ [INFO] Patching Liquibase binary to use sh instead of bash..."
+sed -i 's|#!/bin/bash|#!/bin/sh|' "$LIQUIBASE_BIN"
+sed -i 's|env bash|env sh|g' "$LIQUIBASE_BIN"
+sed -i 's| bash | sh |g' "$LIQUIBASE_BIN"
+
+# Check version (optional)
+echo "✅ [INFO] Liquibase version:"
+"$LIQUIBASE_BIN" --version || echo "[WARN] Could not get liquibase version"
+
+# Check required DB environment variables early
+: "${DB_URL:?Missing DB_URL environment variable}"
+: "${DB_USER:?Missing DB_USER environment variable}"
+: "${DB_PASS:?Missing DB_PASS environment variable}"
+
+echo
+echo
+echo
+echo "User Paased Environment Variables through GoCD Pipeline: execution in liquibase-wrapper.sh"
+echo "✅ [INFO] DB Username: $DB_USER"
+echo "✅ [INFO] DB URL: $DB_URL"
+echo "✅ [INFO] CHANGEREQUEST_ID: $CHANGEREQUEST_ID"
+
+# Change directory to changelog directory so relative path works
+cd "$CHANGELOG_DIR" || {
+  echo "❌ [ERROR] Failed to change directory to $CHANGELOG_DIR"
+  exit 1
+}
+
+echo "📄 ------------------------------------------------------------->> Running liquibase status --verbose before update !"
+"$LIQUIBASE_BIN" \
+  --driver=oracle.jdbc.OracleDriver \
+  --url="$DB_URL" \
+  --username="$DB_USER" \
+  --password="$DB_PASS" \
+  --changeLogFile="changelog.xml" \
+  status --verbose
+echo
+echo
+echo "📜 ------------------------------------------------------------->> Liquibase history before update !"
+"$LIQUIBASE_BIN" \
+  --driver=oracle.jdbc.OracleDriver \
+  --url="$DB_URL" \
+  --username="$DB_USER" \
+  --password="$DB_PASS" \
+  --changeLogFile="changelog.xml" \
+  history
+echo
+echo
+echo "⚙️ ------------------------------------------------------------->> Performing liquibase update !"
+"$LIQUIBASE_BIN" \
+  --driver=oracle.jdbc.OracleDriver \
+  --url="$DB_URL" \
+  --username="$DB_USER" \
+  --password="$DB_PASS" \
+  --changeLogFile="changelog.xml" \
+  update
+
+echo
+echo
+echo "📄 ------------------------------------------------------------->> Running liquibase status --verbose After update !"
+"$LIQUIBASE_BIN" \
+  --driver=oracle.jdbc.OracleDriver \
+  --url="$DB_URL" \
+  --username="$DB_USER" \
+  --password="$DB_PASS" \
+  --changeLogFile="changelog.xml" \
+  status --verbose
+echo
+echo
+echo "📜 ------------------------------------------------------------->> Liquibase history After update !"
+"$LIQUIBASE_BIN" \
+  --driver=oracle.jdbc.OracleDriver \
+  --url="$DB_URL" \
+  --username="$DB_USER" \
+  --password="$DB_PASS" \
+  --changeLogFile="changelog.xml" \
+  history
+echo
+echo
+
+echo "✅ liquibase-wrapper.sh completed"
+
+
+
+run-liquibase.sh
+#!/bin/sh
+set -euo pipefail
+
+echo "============================================================================================================================="
+echo "============================================     Starting run-liquibase.sh      ============================================="
+echo "============================================================================================================================="
+
+
+ENVIRONMENT=${ENVIRONMENT:-}
+DATABASE_URL=${DATABASE_URL:-}
+CHANGEREQUEST_ID=${CHANGEREQUEST_ID:-}
+OPERATION=${OPERATION:-}
+ROLLBACK_TAG=${ROLLBACK_TAG:-}
+
+# ------------------------------
+# Validate ENVIRONMENT
+# ------------------------------
+if [ -z "$ENVIRONMENT" ]; then
+  printf "ERROR: ENVIRONMENT is required (uat/prod)\n" >&2
+  sleep 0.1
+  exit 1
+fi
+
+ENV_LOWER=$(printf '%s' "$ENVIRONMENT" | awk '{print tolower($0)}')
+ENV_UPPER=$(printf '%s' "$ENVIRONMENT" | awk '{print toupper($0)}')
+
+# ------------------------------
+# Validate OPERATION
+# ------------------------------
+if [ -z "$OPERATION" ]; then
+  printf "ERROR: OPERATION is required (update/rollback)\n" >&2
+  sleep 0.1
+  exit 1
+fi
+
+OPERATION_LOWER=$(printf '%s' "$OPERATION" | awk '{print tolower($0)}')
+
+if [ "$OPERATION_LOWER" != "update" ] && [ "$OPERATION_LOWER" != "rollback" ]; then
+  printf "ERROR: Invalid OPERATION: %s\n" "$OPERATION" >&2
+  printf "HINT: Must be either update or rollback\n" >&2
+  sleep 0.1
+  exit 1
+fi
+
+# ------------------------------
+# Validate DATABASE_URL
+# ------------------------------
+if [ -z "$DATABASE_URL" ]; then
+  printf "ERROR: DATABASE_URL is required\n" >&2
+  sleep 0.1
+  exit 1
+fi
+
+echo
+echo "User Paased Environment Variables through GoCD Pipeline: execution in run-liquibase.sh"
+echo
+echo "ENVIRONMENT: $ENV_LOWER"
+echo "DATABASE_URL: $DATABASE_URL"
+echo "OPERATION: $OPERATION"
+
+# ==================================================================
+# STRICT IPv4 VALIDATION
+# ==================================================================
+HOST_PART=$(printf '%s\n' "$DATABASE_URL" | sed -n 's/.*@\/\/\([^:\/]*\).*/\1/p')
+
+if [ -z "$HOST_PART" ]; then
+  printf "ERROR: Could not extract DB host from DATABASE_URL: %s\n" "$DATABASE_URL" >&2
+  sleep 0.1
+  exit 1
+fi
+
+# Ensure IPv4 format only
+if ! printf '%s' "$HOST_PART" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'; then
+  printf "ERROR: Host '%s' is not a valid IPv4 address.\n" "$HOST_PART" >&2
+  printf "HINT: Do NOT use hostname. Use IP like:\n" >&2
+  printf "  jdbc:oracle:thin:@//10.2.2.12:1521/ORCL\n" >&2
+  sleep 0.1
+  exit 1
+fi
+
+DB_IP="$HOST_PART"
+DB_IP_UNDERSCORE=$(printf '%s' "$DB_IP" | tr '.' '_')
+
+echo
+echo "Extracted and Normalised DB IP:"
+echo "DB_IP: $DB_IP"
+echo "DB_IP_UNDERSCORE: $DB_IP_UNDERSCORE"
+echo
+
+# ------------------------------
+# Resolve Credentials
+# ------------------------------
+DB_USER_VAR="${ENV_UPPER}_${DB_IP_UNDERSCORE}_DATABASE_USERNAME"
+DB_PASS_VAR="${ENV_UPPER}_${DB_IP_UNDERSCORE}_DATABASE_PASSWORD"
+
+DB_USER=$(printenv "$DB_USER_VAR" || true)
+DB_PASS=$(printenv "$DB_PASS_VAR" || true)
+
+if [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
+  printf "ERROR: Missing credentials for DB host %s\n" "$DB_IP" >&2
+  printf "Make sure Database credentials defined/configured in Pipeline secure Variables for DB host %s\n" "$DB_IP" >&2
+  printf "Expected environment variables:\n" >&2
+  printf "  %s\n" "$DB_USER_VAR" >&2
+  printf "  %s\n" "$DB_PASS_VAR" >&2
+  sleep 0.1
+  exit 1
+fi
+
+echo "Using credentials: $DB_USER_VAR"
+
+# ------------------------------
+# Base dirs + Docker Image
+# ------------------------------
+LIQUIBASE_BASE_DIR=$(pwd)
+DATABASES_DIR="$LIQUIBASE_BASE_DIR/../databases"
+LIQUIBASE_DOCKER_IMAGE="artifactory.idfcfirstbank.com/etoll-docker/optimus-library/liquibase_alpine:4.21.0-r0"
+
+# ------------------------------
+# Validate Artifactory credentials
+# ------------------------------
+if [ -z "${ARTIFACTORY_USERNAME:-}" ] || [ -z "${ARTIFACTORY_PASSWORD:-}" ]; then
+  printf "ERROR: ARTIFACTORY_USERNAME and ARTIFACTORY_PASSWORD are required\n" >&2
+  sleep 0.1
+  exit 1
+fi
+
+
+echo "$ARTIFACTORY_PASSWORD" | docker login artifactory.idfcfirstbank.com  --username "$ARTIFACTORY_USERNAME" --password-stdin  2>/dev/null
+
+echo "Running Liquibase docker container..."
+
+if [ "$OPERATION_LOWER" = "rollback" ]; then
+  echo "Running rollback operation inside Docker container"
+  docker run --rm \
+    --workdir /liquibase_scripts \
+    -e DB_URL="$DATABASE_URL" \
+    -e CHANGEREQUEST_ID="$CHANGEREQUEST_ID" \
+    -e DB_USER="$DB_USER" \
+    -e DB_PASS="$DB_PASS" \
+    -e DB_IP_UNDERSCORE="$DB_IP_UNDERSCORE" \
+    -e ROLLBACK_TAG="$ROLLBACK_TAG" \
+    -v "$DATABASES_DIR:/liquibase/databases:ro" \
+    -v "$LIQUIBASE_BASE_DIR:/liquibase_scripts:ro" \
+    "$LIQUIBASE_DOCKER_IMAGE" /bin/sh -c "
+      sh /liquibase_scripts/liquibase-rollback.sh \"$ENV_LOWER\"
+    "
+else
+  echo "Running update operation inside Docker container"
+  docker run --rm \
+    --workdir /liquibase_scripts \
+    -e DB_URL="$DATABASE_URL" \
+    -e CHANGEREQUEST_ID="$CHANGEREQUEST_ID" \
+    -e DB_USER="$DB_USER" \
+    -e DB_PASS="$DB_PASS" \
+    -e DB_IP_UNDERSCORE="$DB_IP_UNDERSCORE" \
+    -v "$DATABASES_DIR:/liquibase/databases:ro" \
+    -v "$LIQUIBASE_BASE_DIR:/liquibase_scripts:ro" \
+    "$LIQUIBASE_DOCKER_IMAGE" /bin/sh -c "
+      sh /liquibase_scripts/liquibase-wrapper.sh \"$ENV_LOWER\"
+    "
+fi
+
+echo "run-liquibase.sh completed successfully"
