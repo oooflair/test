@@ -20,3 +20,17 @@ Select * from all_tab_partitions where table_name ='PARTNER_TRANSACTION_TBL';
     <include file="changesets/1001_SELECT_PARTNER_TRANSACTION_TBL_1001.sql" relativeToChangelogFile="true"/>
    
 </databaseChangeLog>
+
+
+<include file="changesets/MULE_UAT_LB_TEST_0204.sql" relativeToChangelogFile="true"/>
+        <changeSet id="MULE_UAT_LB_TEST_0204" author="sarankumar.v">
+        <tagDatabase tag="tag-MULE_UAT_LB_TEST_0204"/>
+        </changeSet>
+
+        <include file="changesets/MULE_UAT_ROLLBACK_TEST_0204.sql" relativeToChangelogFile="true"/>
+        <include file="changesets/MULE_UAT_ROLLBACK_TEST_0205.sql" relativeToChangelogFile="true"/>
+
+        <include file="changesets/MULE_UAT_ROLLBACK_TEST_0206.sql" relativeToChangelogFile="true"/>
+        <changeSet id="MULE_UAT_ROLLBACK_TEST_0206" author="sarankumar.v">
+        <tagDatabase tag="tag-MULE_UAT_ROLLBACK_TEST_0206"/>
+        </changeSet>
