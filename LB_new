@@ -1,1 +1,22 @@
 .
+
+
+
+-- liquibase formatted sql
+
+-- changeset sarankumar.v:SELECT_PARTNER_TRANSACTION_TBL_1001 labels="Selecting-PARTNER_TRANSACTION_TBL-partitions"
+-- comment: This changeset running to see PARTNER_TRANSACTION_TBL-partitions
+Select * from all_tab_partitions where table_name ='PARTNER_TRANSACTION_TBL';
+
+
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd"
+    objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <include file="changesets/1001_SELECT_PARTNER_TRANSACTION_TBL_1001.sql" relativeToChangelogFile="true"/>
+   
+</databaseChangeLog>
